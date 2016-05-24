@@ -30,21 +30,14 @@ std::ostream& operator<< (std::ostream& os, const Rules& rules) {
     const auto& items = itemsAndSupp.first;
     const auto& suppIndex = itemsAndSupp.second;
 
-    // I. little optimization for output sting to stream:
     std::string str;
-    str.reserve(items.size() * 2);
-    str.push_back('{');
-
-    // symbol per bit:
-    for (const auto& bit : items) { 
-      str.push_back(bit ? '1' : '0');
-      str.push_back(',');
+    for (size_t i=0; i< items.size(); ++i) {
+      if (items[i])
+	str += "{" + std::to_string(i+1) + "} ";
     }
-    str.back() = '}'; // change last comma to bracket
+    str += "-> ";
 
-    // II. stream output:
     os << str
-       << " "
        << suppIndex << '\n';
   }
 
