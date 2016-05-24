@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE(inconsistentDataLenghPerLine)
     "0101001"; // <-- one more element
 
   std::stringstream bitsString{ s };
-  BOOST_CHECK_THROW(Data::parseDataFromStream(bitsString), std::logic_error);
+  BOOST_CHECK_THROW(Data::parseUniqueDataFromStream(bitsString), std::logic_error);
 }
 
 BOOST_AUTO_TEST_CASE(emptyData)
@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(emptyData)
   std::string s = "";
   std::stringstream bitsString{ s };
 
-  BOOST_CHECK_THROW(Data::parseDataFromStream(bitsString), std::logic_error);
+  BOOST_CHECK_THROW(Data::parseUniqueDataFromStream(bitsString), std::logic_error);
 }
 
 BOOST_AUTO_TEST_CASE(wrongData)
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(wrongData)
     "110100\n";
 
   std::stringstream bitsString{ s };
-  BOOST_CHECK_THROW(Data::parseDataFromStream(bitsString), std::logic_error);
+  BOOST_CHECK_THROW(Data::parseUniqueDataFromStream(bitsString), std::logic_error);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
