@@ -3,7 +3,7 @@ TEST:=tests
 
 CPP:=g++
 INCLUDE_DIR:=-I.
-CFLAGS:=$(INCLUDE_DIR) -std=c++11 -ggdb -Wall -Wextra -Wshadow -pedantic -O0
+CFLAGS:=$(INCLUDE_DIR) -std=c++11 -Wall -Wextra -Wshadow -pedantic -O3
 LIBS:=-lboost_system
 
 SOURCE:=Options/Options.cpp Data/Data.cpp Rules/Rules.cpp
