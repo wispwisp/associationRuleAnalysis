@@ -42,9 +42,9 @@ Rules::Rules(const Data& data, const double& threshold) {
 	appearPerTransaction += uniqueCount;
     }
 
-    double supply = double(appearPerTransaction) / double(data.get().size());
-    if (supply >= threshold) {
-      itemsWithSuppIndex.emplace_back(std::make_pair(candidate, supply));
+    double support = double(appearPerTransaction) / double(data.get().size());
+    if (support >= threshold) {
+      itemsWithSuppIndex.emplace_back(std::make_pair(candidate, support));
       generateAndCheck(i + 1, std::move(candidate));
     }
 
