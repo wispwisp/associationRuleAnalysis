@@ -1,28 +1,59 @@
 #include "Rules.hpp"
 
+#include <functional>
 #include <numeric>
+#include <iostream>
 
-Rules Rules::filterBySupportWithRespectToTransactions(const Data& data, const double& threshold) {
-
-  Rules r;
-  size_t transactionCount = data.get().size();
-  for (const auto& itemsAndOccurrence : data.get()) {
-
-    const auto& items = itemsAndOccurrence.first;
-    const auto& occurrenceCount = itemsAndOccurrence.second;
-
-    double suppIndex = double(occurrenceCount) / double(transactionCount);
-    unsigned itemNumber = std::accumulate(std::begin(items), std::end(items), 0u);
-
-    // if pass threshold, then save:
-    if (itemNumber > 1         // we interested in more than one-item transaction
-	&& suppIndex >= threshold) { // threshold specified by user
-
-      r.itemsWithSuppIndex.emplace_back(std::make_pair(items, suppIndex));
+namespace Tools {
+  bool isSubset(const Data::BitsType& source, const Data::BitsType& rhs) {
+    // We interseted only in appeared items, so if we have 1 in one set we 
+    // should have 1 in another. We do not care for '0'
+    for (size_t i = 0; i < source.size(); ++i) {
+      if (source[i]) {
+	if (not rhs[i]) return false;
+      }
     }
-  }
 
-  return r;
+    return true;
+  }
+}
+
+Rules::Rules(const Data& data, const double& threshold) {
+
+  std::function<void(size_t, Data::BitsType)>
+    generateAndCheck = [&](size_t i, Data::BitsType candidate) {
+
+    if (i == candidate.size())
+      return; // stop recursion progression
+
+    // ..11[0]...
+    Data::BitsType withHole = candidate;
+
+    // ..11[1]...
+    candidate[i] = 1;
+
+    size_t appearPerTransaction = 0;
+    for (const auto& transaction : data.get()) {
+
+      const Data::BitsType& itemSet = transaction.first;
+      const size_t uniqueCount = transaction.second;
+
+      if (Tools::isSubset(candidate, itemSet))
+	appearPerTransaction += uniqueCount;
+    }
+
+    double supply = double(appearPerTransaction) / double(data.get().size());
+    if (supply >= threshold) {
+      itemsWithSuppIndex.emplace_back(std::make_pair(candidate, supply));
+      generateAndCheck(i + 1, std::move(candidate));
+    }
+
+    // try with holes: (ex.) 001010 ("Try next item")
+    generateAndCheck(i + 1, std::move(withHole));
+  };
+
+  // start check candidates:
+  generateAndCheck(0, Data::BitsType(data.transactionSize()));
 }
 
 std::ostream& operator<< (std::ostream& os, const Rules& rules) {

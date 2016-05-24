@@ -8,16 +8,14 @@
 #include "Data/Data.hpp"
 
 class Rules {
-  using ItemsWithSupportIndex = std::vector<std::pair<BitsType, double>>;
-  ItemsWithSupportIndex itemsWithSuppIndex;
 public:
-  static Rules filterBySupportWithRespectToTransactions(const Data&, const double& threshold);
-  /* TODO
-     static Rules filterByConfidence(const Data&) { return Rules(); }
-     static Rules filterByConfidence(const Rules&) { return Rules(); }
-  */
+  using ItemsWithSupportIndex = std::vector<std::pair<Data::BitsType, double>>;
 
+  Rules(const Data&, const double& threshold);
   friend std::ostream& operator<< (std::ostream&, const Rules&);
+
+private:
+  ItemsWithSupportIndex itemsWithSuppIndex;
 };
 
 #endif // MY_RULES
