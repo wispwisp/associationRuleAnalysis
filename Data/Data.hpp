@@ -12,10 +12,14 @@ public:
 
   const DataType& get() const noexcept { return data; }
   size_t transactionSize() const noexcept { return sizeOfDimension; }
+  size_t transactionsCount() const noexcept { return numOfTransactions; }
 
   static Data parseUniqueDataFromStream(std::istream&);
 
 private:
+  // we need correct number of T in algorithm instead of .size() of unique
+  size_t numOfTransactions;
+
   size_t sizeOfDimension;
   DataType data;
 };

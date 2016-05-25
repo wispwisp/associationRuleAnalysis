@@ -30,6 +30,7 @@ Data Data::parseUniqueDataFromStream(std::istream& stream) {
     throw std::logic_error("Error reading stream");
 
   data.sizeOfDimension = buf.size();
+  data.numOfTransactions = 0;
 
   // increment occurrence of transaction`s elements
   data.data[Tools::getBitsFromString(buf)]++;
@@ -40,6 +41,7 @@ Data Data::parseUniqueDataFromStream(std::istream& stream) {
       throw std::logic_error("Data inconsistent");
 
     data.data[Tools::getBitsFromString(buf)]++;
+    data.numOfTransactions++;
   }
 
   return data;
