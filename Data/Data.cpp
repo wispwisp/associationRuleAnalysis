@@ -34,6 +34,7 @@ Data Data::parseUniqueDataFromStream(std::istream& stream) {
 
   // increment occurrence of transaction`s elements
   data.data[Tools::getBitsFromString(buf)]++;
+  data.numOfTransactions++;
 
   // II. process rest of the file content:
   while (stream >> buf) {
