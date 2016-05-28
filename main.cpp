@@ -6,31 +6,20 @@
 #include "Data/Data.hpp"
 
 int main(int argc, char** argv) {
+  try {
+    Options opts(argc, argv);
 
-  // todo - remove when Options class will be ready:
+    std::ifstream file(opts.getFileName());
+    auto data = Data::parseUniqueDataFromStream(file);
+    file.close();
 
-  // Options opts(argc, argv);
-  if (argc < 4) {
-    std::cout << "Usage: " << argv[0] << " <file name> <threshold> <sort-type> <number of rules to show>\n";
+    Rules rules(data, opts.getThreshold());
+    std::cout << rules << '\n';
+  }
+  catch (const std::exception& ex) {
+    std::cerr << ex.what() << std::endl;
     return -1;
   }
 
-  struct Opts {
-    std::string fileName;
-    double threshold;
-    Opts(const char* fn, const char* th) : fileName(fn), threshold(std::stod(th)) {}
-  };
-  Opts opts(argv[1], argv[2]);
-
-  // ****
-
-
-
-
-  std::ifstream file(opts.fileName);
-  auto data = Data::parseUniqueDataFromStream(file);
-  file.close();
-
-  Rules rules(data, opts.threshold);
-  std::cout << rules << '\n';
+  return 0;
 }
