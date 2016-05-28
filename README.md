@@ -10,3 +10,4 @@ todo:
   * count of rules to be printed to screen
   * tests for Rules (at least for Tools::isSubset)
   * tests for Options
+  * parse options by Boost.Program_options
